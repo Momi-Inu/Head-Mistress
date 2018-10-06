@@ -4,7 +4,7 @@ import { IApplication } from "../../db/formats/application.format";
 import { IQuestion, IReaction } from "../../db/formats/question.format";
 import { BotEmbedResponse } from "./bot-response.util";
 import { CommandoClient } from "discord.js-commando";
-import { applicationResponse } from "../commands/formats/answers.format";
+import { applicationResponse } from "../formats/answers.format";
 
 /**
  * Class used to act as an interface between discord and the applicatiopn

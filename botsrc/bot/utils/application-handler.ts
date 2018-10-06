@@ -1,6 +1,6 @@
 import { IApplication } from "../../db/formats/application.format";
 import { IQuestion, IReaction } from "../../db/formats/question.format";
-import { answers } from "../commands/formats/answers.format";
+import { answers } from "../formats/answers.format";
 
 // this is the handler that will create and manage applications done by a user
 // REALLY FOR INTERNAL UTIL MANAGEMENT ONLY

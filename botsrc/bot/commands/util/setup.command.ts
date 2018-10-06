@@ -3,7 +3,7 @@ import { Message, GuildMember, Guild, Role, Collection } from "discord.js";
 import { AppDispatcher } from "../../utils/application-dispatcher";
 import { AppBuilder } from "../../utils/application-builder";
 import { ApplicationController } from "../../../db/controllers/application/application.controller";
-import { applicationResponse } from "../formats/answers.format";
+import { applicationResponse } from "../../formats/answers.format";
 
 // type response = 
 
