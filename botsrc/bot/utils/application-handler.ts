@@ -1,12 +1,14 @@
 import { IApplication } from "../../db/formats/application.format";
 import { IQuestion, IReaction } from "../../db/formats/question.format";
+import { answers } from "../commands/formats/answers.format";
 
 // this is the handler that will create and manage applications done by a user
 // REALLY FOR INTERNAL UTIL MANAGEMENT ONLY
 export class AppHandler {
     application: IApplication;
     private currentQuestion: IQuestion;
-    private answers: IAnswer[];
+
+    private answers: answers
 
     /**
      * This is the handler that will create and manage applications done by a user
@@ -15,7 +17,7 @@ export class AppHandler {
      */
     constructor(application: IApplication) {
         this.application = application;
-        this.answers = [];
+        this.answers = {};
     }
 
     /**
@@ -85,25 +87,21 @@ export class AppHandler {
 
     private commitReactionAnswer(answer: string, question: IQuestion) {
         const reaction = this.getReactionFromAnswer(answer, question);
-        const reactionAnswer = `${answer} - ${reaction.prompt}`;
-        this.answers.push({
-            prompt: question.prompt,
-            answer: reactionAnswer
-        });
-
+        this.answers[question.questionName] = {
+            questionPrompt: question.prompt,
+            answer: answer,
+            reactionPrompt: reaction.prompt,
+        };
         return reaction;
     }
 
     private commitFreeTextAnswer(answer: string, question: IQuestion) {
-        this.answers.push({
-            prompt: question.prompt,
+        this.answers[question.questionName] = {
+            questionPrompt: question.prompt,
             answer: answer
-        });
+        };
+
+        return answer;
     };
 
 }
-
-interface IAnswer {
-    prompt: string;
-    answer: string;
-};

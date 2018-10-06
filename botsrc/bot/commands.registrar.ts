@@ -14,7 +14,6 @@ export const setBotCommandGroupsFor = (client: CommandoClient) => {
         .registerDefaultTypes()
         .registerTypesIn(join(__dirname, './types'))
         .registerGroups([
-            ['applicant-management', 'Manage Your Server Applications'],
             ['util', 'Helpful Commands'],
         ])
         .registerDefaultCommands({

@@ -4,6 +4,7 @@ import { IApplication } from "../../db/formats/application.format";
 import { IQuestion, IReaction } from "../../db/formats/question.format";
 import { BotEmbedResponse } from "./bot-response.util";
 import { CommandoClient } from "discord.js-commando";
+import { applicationResponse } from "../commands/formats/answers.format";
 
 /**
  * Class used to act as an interface between discord and the applicatiopn
@@ -61,10 +62,19 @@ export class AppDispatcher {
         this.member.send(intro);
     }
 
+    public sendCompletedMessage() {
+        const completion = new BotEmbedResponse(this.client);
+
+        if (this.guild) completion.setThumbnailToGuild(this.guild);
+        completion.setDescription('That was the last part of the process! Thank you for filling this out, if you check your roles they should be updated');
+        completion.setTitle(this.app.application.title);
+        this.member.send(completion);
+    }
+
     /**
      * this is the main dispatcher and will send all the answers that need be to the user
      */
-    public async dispatchQuestions() {
+    public async dispatchQuestions(): Promise<applicationResponse> {
 
         // send this message to notify them on what they are actually applying for
         // this is to stop confusion bascially for the end user
@@ -94,7 +104,12 @@ export class AppDispatcher {
                 // add more types here later if need be
             }
         } while (question)
-        return { status: 'COMPLETED' };
+
+        this.sendCompletedMessage();
+        return {
+            answers: this.app.getAggregatedAnswers(),
+            status: 'COMPLETED'
+        };
     }
 
     /**
@@ -214,6 +229,7 @@ export class AppDispatcher {
         question.reactions.forEach((reaction) => {
             availableReactions += `${reaction.reaction} - ${reaction.prompt}\n`;
         });
+        reactionQuestionEmbed.setDescription(question.prompt);
         reactionQuestionEmbed.addField('Choose an option below', availableReactions);
         reactionQuestionEmbed.addField('Time remaining', `${this.app.application.questionTimeout} minutes left for this question`);
         return reactionQuestionEmbed;
@@ -227,6 +243,7 @@ export class AppDispatcher {
     private buildFreetextQuestion(question: IQuestion) {
         const freetextQuestionEmbed = new BotEmbedResponse(this.client);
         freetextQuestionEmbed.setAuthor(this.app.application.title);
+        freetextQuestionEmbed.setDescription(question.prompt);
         freetextQuestionEmbed.addField('Answer the following question with your next message', question.prompt);
         freetextQuestionEmbed.addField('Time remaining', `${this.app.application.questionTimeout} minutes left for this question`);
         return freetextQuestionEmbed;

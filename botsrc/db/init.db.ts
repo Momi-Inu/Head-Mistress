@@ -2,8 +2,8 @@ import * as mongoose from 'mongoose';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 
-// connect to the database via the appmanager database
-mongoose.connect('mongodb://localhost/appmanager', {
+// connect to the database via the headmistress database
+mongoose.connect('mongodb://localhost/headmistress', {
     useNewUrlParser: true
 });
 

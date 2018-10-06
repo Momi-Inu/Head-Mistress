@@ -24,4 +24,5 @@ export interface IQuestion {
     prompt: string;
     reactions?: IReaction[];
     next?: string;
+    questionName: string
 };

@@ -168,10 +168,11 @@ export class AppBuilder {
      * @param emoji unicode compatible emojis
      * @param prompt description to show with the emoji
      */
-    static createReaction(emoji: string, prompt: string): IReaction {
+    static createReaction(emoji: string, prompt: string, next?: string): IReaction {
         return {
             reaction: emoji,
-            prompt: prompt
+            prompt: prompt,
+            next: next
         };
     }
 
@@ -197,7 +198,8 @@ export class AppBuilder {
             type: 'REACTION',
             prompt: prompt,
             reactions: reactions,
-            next: next
+            next: next,
+            questionName: questionName
         };
 
         // if there is no start yet, set it. if not just use the given question name
@@ -223,7 +225,8 @@ export class AppBuilder {
         const freetextQuestion: IQuestion = {
             type: 'FREETEXT',
             prompt: prompt,
-            next: next
+            next: next,
+            questionName: questionName
         };
 
         // if there is no start yet, set it. if not just use the given question name
