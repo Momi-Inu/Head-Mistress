@@ -147,7 +147,6 @@ class SetupCommand extends Command {
             )
 
         const myDispatcher = new AppDispatcher(myApp.generateApplication(), message.member, this.client);
-        ApplicationController.Post.application(myApp.generateApplication());
         message.channel.send(`Sending application... ${message.author.username}, please check your DM\'s.`);
 
         myDispatcher.useGuild(message.guild).dispatchQuestions().then((response) => {
