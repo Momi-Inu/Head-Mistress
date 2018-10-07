@@ -43,14 +43,14 @@ class CollarCommand extends Command {
         if (collareeHasCollaredUser)
             return message.channel.send(`Hmmm... how can I let you collar ${
                 args.collaree.displayName
-                }~. ${args.collaree.displayName} is the one who owns you pet!`);
+                }~ ${args.collaree.displayName} is the one who owns you pet!`);
 
         if (args.collaree.id === this.client.user.id)
             return message.channel.send(`Fufufu, you want me to be your little pet? Well too bad, I like to be on the other side ;)`);
 
         // send the collar request
         await UserController.Put.collarUser(message.member, args.collaree);
-        return message.channel.send(`${message.member.displayName} has put a collar around his new pet, ${args.collaree.displayName}!`);
+        return message.channel.send(`${message.member.displayName} has put a collar around his / hers new pet, ${args.collaree.displayName}!`);
     }
 }
 

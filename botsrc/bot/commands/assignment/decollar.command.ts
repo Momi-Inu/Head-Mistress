@@ -38,7 +38,7 @@ class DecollarCommand extends Command {
 
         if (collarOnOtherPerson) {
             await UserController.Put.decollarUser(message.member, args.collar);
-            return message.channel.send(`${message.member.displayName} let his pet ${args.collar.displayName} go!`);
+            return message.channel.send(`${message.member.displayName} let his / hers pet ${args.collar.displayName} go!`);
         } else {
 
             // this is done because we need to make sure that it exists visa versa

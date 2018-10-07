@@ -1,6 +1,6 @@
 import { model } from "mongoose";
 import { IUserModel } from "../../formats/user.fomat";
-import { GuildMember } from "discord.js";
+import { GuildMember, Guild, User } from "discord.js";
 import { Controller } from "../base";
 import { UserPutController } from "./user.put";
 
@@ -11,6 +11,24 @@ export class UserGetController extends Controller {
 
     public static async user(user: GuildMember) {
         return await this.models.User.findOne({ discordId: user.id, discordGuild: user.guild.id });
+    }
+
+    public static async populatedCollars(user: GuildMember) {
+        let mongoUser = await UserPutController.ensuredGet(user);
+        mongoUser = await mongoUser.populate('collarees').populate('collarers').execPopulate();
+        return mongoUser;
+    }
+
+    public static async collarees(user: GuildMember) {
+        let monogUser = await UserPutController.ensuredGet(user);
+        monogUser = await monogUser.populate('collarees').execPopulate();
+        return monogUser.collarees;
+    }
+
+    public static async collarers(user: GuildMember) {
+        let monogUser = await UserPutController.ensuredGet(user);
+        monogUser = await monogUser.populate('collarers').execPopulate();
+        return monogUser.collarers;
     }
 
     public static async isUsersDom(sub: GuildMember, potentialDom: GuildMember) {
@@ -35,7 +53,7 @@ export class UserGetController extends Controller {
         // i have absolutely no clue what javascript decided that the collarer was 
         // an object when its clearly a string so i have to string it again
         const collarerFromList = (mongoCollaree.collarers as string[]).find(collarer => collarer.toString() == mongoCollarer._id);
-        
+
         if (collarerFromList) return true;
         return false;
     }
