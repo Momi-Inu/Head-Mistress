@@ -14,7 +14,9 @@ class CollarCommand extends Command {
                 {
                     key: 'collaree',
                     prompt: 'Who are you collaring?',
-                    type: 'member'
+                    type: 'member',
+                    validate: () => true,
+                    default: 'NONE'
                 }
             ],
             examples: [
@@ -23,16 +25,23 @@ class CollarCommand extends Command {
         });
     }
 
-    async run(message: CommandMessage, args: { collaree: GuildMember }): Promise<Message | Message[]> {
+    async run(message: CommandMessage, args: { collaree: GuildMember | 'NONE' }): Promise<Message | Message[]> {
+
+        if (args.collaree === 'NONE')
+            return message.channel.send('Hun who were you thinking of collaring? Yourself? :P');
+
+        if (args.collaree === null)
+            return message.channel.send(`Hmmm... doesn't look like that pet exists! Sure you spelled it right? :P`);
+
         // boolean to check if the mentions user is the holder of the
         // collar
         const isCollaredAlreadyByUser = await UserController.Get.isCollaredBy(args.collaree, message.member);
-        
+
         // the reason why we have to do the reverse is because it is
         // not guarenteed that if the previous statement returns false
         // that it exists visa versa it
         const collareeHasCollaredUser = await UserController.Get.isCollaredBy(message.member, args.collaree);
-        
+
         // some validations
         if (args.collaree.id === message.author.id)
             return message.channel.send(`A pet can't own itself you know!`);

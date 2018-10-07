@@ -14,7 +14,8 @@ class DecollarCommand extends Command {
                 {
                     key: 'collar',
                     prompt: 'Whos collar are you removing?',
-                    type: 'member'
+                    type: 'member',
+                    default: 'NONE'
                 }
             ],
             examples: [
@@ -23,7 +24,10 @@ class DecollarCommand extends Command {
         });
     }
 
-    async run(message: CommandMessage, args: { collar: GuildMember }): Promise<Message | Message[]> {
+    async run(message: CommandMessage, args: { collar: GuildMember | 'NONE'}): Promise<Message | Message[]> {
+
+        if(args.collar === 'NONE')
+            return message.channel.send('I think you forgot to tell me which collar to remove!');
 
         // checks if the mentioned user was the one
         // who actually had the collar
