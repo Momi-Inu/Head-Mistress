@@ -1,6 +1,6 @@
-# App Manager
+# Head Mistress!
 
-## Follow these steps to run the bot yoursrlf! (
+## Follow these steps to run the bot yourself! (
 for devs)
 
 1.) Make sure you have a version compatible with the one in the `version` file.
@@ -9,11 +9,17 @@ for devs)
 
 ```json
 {
-    "loginToken": "your login token from discordapp"
+    "loginToken": "your login token from discordapp",
+    "owners": [
+        "couldhaveone_discord_id",
+        "couldhavetwo_discord_id"
+    ]
 }
 ```
 
-3.) Install and run the bot!
+3.) Install MongoDB, thats right baby we r going NoSQL.
+
+3.) Do these commands:
 
 ```bash
 
@@ -22,6 +28,10 @@ npm install
 
 # will build then run the bot viola!
 npm start
+
+# if you want to see all the commands, check the `package.json` file!
 ```
 
-4.) all done! Enjoy!
+4.) You're done!
+
+## Features
