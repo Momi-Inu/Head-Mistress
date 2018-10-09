@@ -33,6 +33,7 @@ class PetsCommand extends Command {
     }
 
     async run(message: CommandMessage): Promise<Message | Message[]> {
+        // refer to owners.command.ts for documentation explaination
         const mongoPets = await UserController.Get.collarees(message.member);
         if (mongoPets.length === 0) return message.channel.send(`Aww looks like you have no pets ~ Don't worry I'm sure it's because you really are one <3`);
         const pets = this.collectMembers(mongoPets as IUser[], message.guild);

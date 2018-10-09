@@ -146,12 +146,22 @@ class SetupCommand extends Command {
                 ]
             )
 
+        // the dispatcher will be the thing that sends the application over to the
+        // users dms
         const myDispatcher = new AppDispatcher(myApp.generateApplication(), message.member, this.client);
+
+        // message telling them they should go to their dms
         message.channel.send(`Sending application... ${message.author.username}, please check your DM\'s.`);
 
-        myDispatcher.useGuild(message.guild).dispatchQuestions().then((response) => {
-            this.determineRoles(response, message.member);
+        // set the guild to be used with the dispatcher
+        // if the guild is NOT set then there will just be no picture
+        myDispatcher.useGuild(message.guild).dispatchQuestions().then((applicationResponse) => {
+
+            // processing to be done with the response
+            this.determineRoles(applicationResponse, message.member);
         }).catch((error) => {
+
+            // ¯\_(ツ)_/¯ yeah i give a shit about conditions
             if (error.message !== 'TIMED OUT')
                 message.channel.send('Please allow me to send you DM\'s to continue the application');
         });

@@ -42,6 +42,7 @@ class PetsCommand extends Command {
     }
 
     async run(message: CommandMessage, args: { guildMember: GuildMember | 'NONE' }): Promise<Message | Message[]> {
+        // refer to owners.command.ts for documentation explaination
         if (args.guildMember === null)
             return message.channel.send(`Looks like you entered someones name wrong! Try again~`);
         let user = (args.guildMember === 'NONE') ? message.member : args.guildMember;

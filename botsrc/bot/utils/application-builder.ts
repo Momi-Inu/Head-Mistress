@@ -167,6 +167,7 @@ export class AppBuilder {
      * 
      * @param emoji unicode compatible emojis
      * @param prompt description to show with the emoji
+     * @param next the next question's ID to go to
      */
     static createReaction(emoji: string, prompt: string, next?: string): IReaction {
         return {
