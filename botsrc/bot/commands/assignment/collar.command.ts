@@ -36,7 +36,7 @@ class CollarCommand extends Command {
         // boolean to check if the mentions user is the holder of the
         // collar
         const isCollaredAlreadyByUser = await UserController.Get.isCollaredBy(args.collaree, message.member);
-
+        
         // the reason why we have to do the reverse is because it is
         // not guarenteed that if the previous statement returns false
         // that it exists visa versa it

@@ -11,7 +11,11 @@ export class UserPostController extends Controller {
     public static async user(user: GuildMember) {
         const mongoUser = new this.models.User({
             discordId: user.id,
-            discordGuild: user.guild.id
+            discordGuild: user.guild.id,
+            userSubs: [],
+            userDoms: [],
+            collarees: [],
+            collarers: []
         });
 
         return await mongoUser.save();

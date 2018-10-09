@@ -1,4 +1,4 @@
-import { model } from "mongoose";
+import { model, mongo, Mongoose } from "mongoose";
 import { IUserModel } from "../../formats/user.fomat";
 import { GuildMember, Guild, User } from "discord.js";
 import { Controller } from "../base";
@@ -31,11 +31,18 @@ export class UserGetController extends Controller {
         return monogUser.collarers;
     }
 
+    public static async hasDom(sub: GuildMember) {
+        const mongoSub = await UserPutController.ensuredGet(sub);
+        console.log(mongoSub.usersSubs.length);
+        return mongoSub.usersDoms.length === 0;
+    }
+
     public static async isUsersDom(sub: GuildMember, potentialDom: GuildMember) {
         const mongoSub = await UserPutController.ensuredGet(sub);
         const mongoDom = await UserPutController.ensuredGet(potentialDom);
 
         const domFromList = (mongoSub.usersDoms as string[]).find(dom => dom.toString() == mongoDom._id);
+
         if (domFromList) return true;
         return false;
     }

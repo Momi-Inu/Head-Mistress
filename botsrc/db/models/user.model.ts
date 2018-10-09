@@ -9,13 +9,13 @@ export const UserSchema = new Schema({
         type: String,
         ref: 'guild'
     },
-    userSubs: [
+    usersSubs: [
         {
             type: Schema.Types.ObjectId,
             ref: 'user'
         }
     ],
-    userDoms: [
+    usersDoms: [
         {
             type: Schema.Types.ObjectId,
             ref: 'user'

@@ -60,4 +60,29 @@ export class UserPutController extends Controller {
             sub: await mongoSub.save()
         }
     }
+
+    public static async rejectUser(dom: GuildMember, sub: GuildMember) {
+        const mongoDom = await this.ensuredGet(dom);
+        const mongoSub = await this.ensuredGet(sub);
+
+        const domsSubsList = mongoDom.usersSubs as string[];
+        const subsDomsList = mongoSub.usersDoms as string[];
+
+        console.log(domsSubsList, mongoSub._id);
+        console.log(subsDomsList, mongoDom._id);
+
+        domsSubsList.splice(domsSubsList.indexOf(mongoSub._id), 1);
+        subsDomsList.splice(subsDomsList.indexOf(mongoDom._id), 1);
+
+        console.log(domsSubsList, mongoSub._id);
+        console.log(subsDomsList, mongoDom._id);
+
+        mongoDom.markModified('usersSubs');
+        mongoSub.markModified('usersDoms');
+
+        return {
+            dom: await mongoDom.save(),
+            sub: await mongoSub.save()
+        }
+    }
 }
