@@ -11,6 +11,8 @@ class PetsCommand extends Command {
             name: commandName,
             group: 'lists',
             memberName: 'lists:profile',
+            autoAliases: true,
+            aliases: ['relationships'],
             description: 'Get yours or someone elses list of pets and owners!',
             args: [
                 {
@@ -23,7 +25,8 @@ class PetsCommand extends Command {
             ],
             examples: [
                 `${client.commandPrefix}${commandName}`
-            ]
+            ],
+            guildOnly: true
         });
     }
 
@@ -33,33 +36,47 @@ class PetsCommand extends Command {
         });
     }
 
-    private formatPets(pets: GuildMember[]) {
+    private formatMembers(member: GuildMember[]) {
         let format = '';
-        pets.forEach(pet => {
+        member.forEach(pet => {
             format += pet.displayName + '\n';
         });
         return format;
     }
 
     async run(message: CommandMessage, args: { guildMember: GuildMember | 'NONE' }): Promise<Message | Message[]> {
-        // refer to owners.command.ts for documentation explaination
+
         if (args.guildMember === null)
             return message.channel.send(`Looks like you entered someones name wrong! Try again~`);
         let user = (args.guildMember === 'NONE') ? message.member : args.guildMember;
 
-        const mongoUser = await UserController.Get.populatedCollars(user as GuildMember);
+        const mongoUser = await UserController.Get.populateAllUseData(user as GuildMember);
+
         const pets = this.collectMembers(mongoUser.collarees as IUser[], message.guild);
-        const owners = this.collectMembers(mongoUser.collarers as IUser[], message.guild);
+        const trainers = this.collectMembers(mongoUser.collarers as IUser[], message.guild);
+        const masters = this.collectMembers(mongoUser.usersDoms as IUser[], message.guild);
+        const slaves = this.collectMembers(mongoUser.usersSubs as IUser[], message.guild);
+
         const response = new BotEmbedResponse(this.client)
-            .setThumbnail(this.client.user.avatarURL)
-            .setDescription(`Here\'s all ${
-                (args.guildMember === 'NONE') ? 'your' : args.guildMember.displayName
-                } pets! Make sure you give them lots of "love"~`
+            .setThumbnail(message.author.avatarURL)
+            .setDescription(
+                `Here\'s all ${
+                    (args.guildMember === 'NONE') ? 'your' : args.guildMember.displayName + '\'s'
+                    } relationships!`
             );
-        if (pets.length === 0) response.addField('Pets', 'No Pets!');
-        else response.addField('Pets', this.formatPets(pets));
-        if (owners.length === 0) response.addField('Owners', 'No Owners!');
-        else response.addField('Owners', this.formatPets(owners));
+
+        if (trainers.length === 0) response.addField('Trainers', 'No trainers!', true);
+        else response.addField('Trainers', this.formatMembers(trainers), true);
+
+        if (masters.length === 0) response.addField('Master', 'You don\'t have one!', true);
+        else response.addField('Masters', this.formatMembers(masters), true);
+
+        if (pets.length === 0) response.addField('Pets', 'No Pets!', true);
+        else response.addField('Pets', this.formatMembers(pets), true);
+
+        if (slaves.length === 0) response.addField('Slaves', 'No Slaves!', true);
+        else response.addField('Slaves', this.formatMembers(slaves), true);
+
         return message.channel.send(response);
     }
 }

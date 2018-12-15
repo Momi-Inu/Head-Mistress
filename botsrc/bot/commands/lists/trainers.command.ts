@@ -4,17 +4,18 @@ import { UserController } from "../../../db/controllers/user/user.controller";
 import { IUser } from "../../../db/formats/user.fomat";
 import { BotEmbedResponse } from "../../utils/bot-response.util";
 
-class OwnersCommand extends Command {
+class TrainersCommand extends Command {
     constructor(client: CommandoClient) {
-        const commandName = 'owners';
+        const commandName = 'trainers';
         super(client, {
             name: commandName,
             group: 'lists',
-            memberName: 'lists:owners',
-            description: 'Get a list of people that are your owners!',
+            memberName: 'lists:trainers',
+            description: 'Get a list of people that are your trainers!',
             examples: [
                 `${client.commandPrefix}${commandName}`
-            ]
+            ],
+            guildOnly: true
         });
     }
 
@@ -38,11 +39,11 @@ class OwnersCommand extends Command {
      const myOwners = 'owner1\nowner2\nowner3';
      ```
      * 
-     * @param owners array of guildMembers
+     * @param trainers array of guildMembers
      */
-    private formatOwners(owners: GuildMember[]) {
+    private trainers(trainers: GuildMember[]) {
         let format = '';
-        owners.forEach(owner => {
+        trainers.forEach(owner => {
             format += owner.displayName + '\n';
         });
         return format;
@@ -51,23 +52,23 @@ class OwnersCommand extends Command {
     async run(message: CommandMessage): Promise<Message | Message[]> {
 
         // get all the owners
-        const mongoOwners = await UserController.Get.collarers(message.member);
+        const mongoTrainers = await UserController.Get.collarers(message.member);
 
         // validation check
-        if (mongoOwners.length === 0) return message.channel.send(
+        if (mongoTrainers.length === 0) return message.channel.send(
             `Aww looks like you have no owners ~ You must feel really lost. Don't worry <3 I'll be your mistress, but I hope you know I'm a rough one ~`
         );
 
         // get all the memberObjects from the owners
-        const owners = this.collectMembers(mongoOwners as IUser[], message.guild);
+        const trainers = this.collectMembers(mongoTrainers as IUser[], message.guild);
 
         // build an embed response
         const response = new BotEmbedResponse(this.client)
-            .setThumbnail(this.client.user.avatarURL)
+            .setThumbnail(message.author.avatarURL)
             .setDescription(`Here\'s all the people who own you! Make sure you worship them and tell them how lucky you are <3`)
-            .addField('Owners', this.formatOwners(owners));
+            .addField('Trainers', this.trainers(trainers));
         return message.channel.send(response);
     }
 }
 
-module.exports = OwnersCommand;
+module.exports = TrainersCommand;

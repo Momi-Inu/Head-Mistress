@@ -14,7 +14,8 @@ class PetsCommand extends Command {
             description: 'Get a list of people you have collared!',
             examples: [
                 `${client.commandPrefix}${commandName}`
-            ]
+            ],
+            guildOnly: true
         });
     }
 
@@ -38,7 +39,7 @@ class PetsCommand extends Command {
         if (mongoPets.length === 0) return message.channel.send(`Aww looks like you have no pets ~ Don't worry I'm sure it's because you really are one <3`);
         const pets = this.collectMembers(mongoPets as IUser[], message.guild);
         const response = new BotEmbedResponse(this.client)
-            .setThumbnail(this.client.user.avatarURL)
+            .setThumbnail(message.author.avatarURL)
             .setDescription(`Here\'s all your pets! Make sure you give them lots of "love"~`)
             .addField('Pets', this.formatPets(pets));
         return message.channel.send(response);

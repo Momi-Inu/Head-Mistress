@@ -13,9 +13,26 @@ export class UserGetController extends Controller {
         return await this.models.User.findOne({ discordId: user.id, discordGuild: user.guild.id });
     }
 
-    public static async populatedCollars(user: GuildMember) {
+    public static async populatedUserCollarData(user: GuildMember) {
         let mongoUser = await UserPutController.ensuredGet(user);
         mongoUser = await mongoUser.populate('collarees').populate('collarers').execPopulate();
+        return mongoUser;
+    }
+
+    public static async populateUserDomData(user: GuildMember) {
+        let mongoUser = await UserPutController.ensuredGet(user);
+        mongoUser = await mongoUser.populate('usersDoms').populate('usersSubs').execPopulate();
+        return mongoUser;
+    }
+
+    public static async populateAllUseData(user: GuildMember) {
+        let mongoUser = await UserPutController.ensuredGet(user);
+        mongoUser = await mongoUser
+            .populate('usersDoms')
+            .populate('usersSubs')
+            .populate('collarees')
+            .populate('collarers')
+            .execPopulate();
         return mongoUser;
     }
 

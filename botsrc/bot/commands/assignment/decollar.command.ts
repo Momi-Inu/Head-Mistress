@@ -21,7 +21,8 @@ class DecollarCommand extends Command {
             ],
             examples: [
                 `${client.commandPrefix}${commandName} @someone#1234`
-            ]
+            ],
+            guildOnly: true
         });
     }
 

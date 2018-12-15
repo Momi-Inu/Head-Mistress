@@ -20,7 +20,8 @@ class SetupCommand extends Command {
             description: 'Set yourself up in the server. Assign roles and everything!',
             examples: [
                 `${client.commandPrefix}${commandName}`
-            ]
+            ],
+            guildOnly: true
         });
 
         this.roleColor = 0x99abb5;

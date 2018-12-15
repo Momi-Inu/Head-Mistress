@@ -21,7 +21,8 @@ class RejectCommand extends Command {
             ],
             examples: [
                 `${client.commandPrefix}${commandName} @yourpet#1234`
-            ]
+            ],
+            guildOnly: true
         });
     }
 
@@ -47,7 +48,7 @@ class RejectCommand extends Command {
 
         const hasDom = await UserController.Get.hasDom(message.member);
 
-        if(!hasDom)
+        if (!hasDom)
             return message.channel.send(`I can't remove any slaves you have if you didn't have any to being with!`);
 
         if (args.sub.id === this.client.user.id)
@@ -55,7 +56,7 @@ class RejectCommand extends Command {
 
         // send the collar request
         await UserController.Put.rejectUser(message.member, args.sub);
-        return message.channel.send(`${message.member.displayName} is free to go! ${args.sub.displayName} is such a good master for letting this happen ~`);
+        return message.channel.send(`${args.sub.displayName} is free to go! ${message.member.displayName} is such a good master for letting this happen ~`);
     }
 }
 

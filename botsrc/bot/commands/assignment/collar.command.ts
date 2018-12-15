@@ -22,7 +22,8 @@ class CollarCommand extends Command {
             ],
             examples: [
                 `${client.commandPrefix}${commandName} @yourpet#1234`
-            ]
+            ],
+            guildOnly: true
         });
     }
 

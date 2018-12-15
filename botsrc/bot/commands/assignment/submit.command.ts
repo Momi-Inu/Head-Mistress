@@ -21,7 +21,8 @@ class SubmitCommand extends Command {
             ],
             examples: [
                 `${client.commandPrefix}${commandName} @yourmaster#1234`
-            ]
+            ],
+            guildOnly: true
         });
     }
 
