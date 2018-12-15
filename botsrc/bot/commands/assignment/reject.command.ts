@@ -1,6 +1,7 @@
 import { Command, CommandoClient, CommandMessage } from "discord.js-commando";
 import { Message, GuildMember, User } from "discord.js";
 import { UserController } from "../../../db/controllers/user/user.controller";
+import { LanguageAdapter } from "../../utils/language-adapter";
 
 class RejectCommand extends Command {
     constructor(client: CommandoClient) {
@@ -29,14 +30,22 @@ class RejectCommand extends Command {
     async run(message: CommandMessage, args: { sub: GuildMember | 'NONE' }): Promise<Message | Message[]> {
 
         if (args.sub === 'NONE')
-            return message.channel.send(`Well then. Rejecting yourself isn't a very master thing to do is it!`);
+            return message.channel.send(
+                LanguageAdapter.setPronouns(
+                    `Well then. Rejecting yourself isn't a very [0:master/mistress/master] thing to do is it!`, message.member
+                )
+            );
 
         if (args.sub === null)
             return message.channel.send(`Hmmm... tried rejecting the person you mentioned. But turns out I can't find them!`);
 
         // some validations
         if (args.sub.id === message.author.id)
-            return message.channel.send(`Well then. Rejecting yourself isn't a very master thing to do is it!`);
+            return message.channel.send(
+                LanguageAdapter.setPronouns(
+                    `Well then. Rejecting yourself isn't a very [0:master/mistress/master] thing to do is it!`, message.member
+                )
+            );
 
         // the reason why we have to do the reverse is because it is
         // not guarenteed that if the previous statement returns false
@@ -44,7 +53,12 @@ class RejectCommand extends Command {
         const subIsTheDom = await UserController.Get.isUsersDom(message.member, args.sub);
 
         if (subIsTheDom)
-            return message.channel.send(`Haha nice try slave ~ You can't run away from your master. This is what you wanted though isn't it? <3`);
+            return message.channel.send(
+                LanguageAdapter.setPronouns(
+                    `Haha nice try slave ~ You can't run away from your [0:master/mistress/master]. This is what you wanted though isn't it? <3`,
+                    args.sub
+                )
+            );
 
         const hasDom = await UserController.Get.hasDom(message.member);
 
@@ -56,7 +70,12 @@ class RejectCommand extends Command {
 
         // send the collar request
         await UserController.Put.rejectUser(message.member, args.sub);
-        return message.channel.send(`${args.sub.displayName} is free to go! ${message.member.displayName} is such a good master for letting this happen ~`);
+        return message.channel.send(
+            LanguageAdapter.setPronouns(
+                `${args.sub.displayName} is free to go! ${message.member.displayName} is such a good [0:master/mistress/master] for letting this happen ~`,
+                message.member
+            )
+        );
     }
 }
 

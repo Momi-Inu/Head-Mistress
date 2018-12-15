@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandMessage, CommandFormatError } from "discord.js-commando";
-import { Message, Guild, GuildMember } from "discord.js";
+import { Message, Guild, GuildMember, User } from "discord.js";
 import { UserController } from "../../../db/controllers/user/user.controller";
 import { IUser } from "../../../db/formats/user.fomat";
 import { BotEmbedResponse } from "../../utils/bot-response.util";
@@ -46,8 +46,11 @@ class PetsCommand extends Command {
 
     async run(message: CommandMessage, args: { guildMember: GuildMember | 'NONE' }): Promise<Message | Message[]> {
 
+        let guildMemberAsUser: User;
         if (args.guildMember === null)
             return message.channel.send(`Looks like you entered someones name wrong! Try again~`);
+        else if (args.guildMember !== 'NONE') guildMemberAsUser = await this.client.fetchUser((args.guildMember as GuildMember).id);
+
         let user = (args.guildMember === 'NONE') ? message.member : args.guildMember;
 
         const mongoUser = await UserController.Get.populateAllUseData(user as GuildMember);
@@ -58,11 +61,13 @@ class PetsCommand extends Command {
         const slaves = this.collectMembers(mongoUser.usersSubs as IUser[], message.guild);
 
         const response = new BotEmbedResponse(this.client)
-            .setThumbnail(message.author.avatarURL)
+            .setThumbnail(
+                (args.guildMember === 'NONE') ? message.author.avatarURL : guildMemberAsUser.avatarURL
+            )
             .setDescription(
                 `Here\'s all ${
-                    (args.guildMember === 'NONE') ? 'your' : args.guildMember.displayName + '\'s'
-                    } relationships!`
+                (args.guildMember === 'NONE') ? 'your' : args.guildMember.displayName + '\'s'
+                } relationships!`
             );
 
         if (trainers.length === 0) response.addField('Trainers', 'No trainers!', true);

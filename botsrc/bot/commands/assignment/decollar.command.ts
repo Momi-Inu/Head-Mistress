@@ -1,6 +1,7 @@
 import { Command, CommandoClient, CommandMessage } from "discord.js-commando";
 import { Message, GuildMember } from "discord.js";
 import { UserController } from "../../../db/controllers/user/user.controller";
+import { LanguageAdapter } from "../../utils/language-adapter";
 
 class DecollarCommand extends Command {
     constructor(client: CommandoClient) {
@@ -47,7 +48,12 @@ class DecollarCommand extends Command {
         // themselves
         if (collarOnOtherPerson) {
             await UserController.Put.decollarUser(message.member, args.collar);
-            return message.channel.send(`${message.member.displayName} let his / hers pet ${args.collar.displayName} go!`);
+            return message.channel.send(
+                LanguageAdapter.setPronouns(
+                    `${message.member.displayName} let [0:his/her] pet ${args.collar.displayName} go!`,
+                    message.member
+                )
+            );
         } else {
 
             // this is done because we need to make sure that it exists visa versa

@@ -1,6 +1,7 @@
 import { Command, CommandoClient, CommandMessage } from "discord.js-commando";
 import { Message, GuildMember, User } from "discord.js";
 import { UserController } from "../../../db/controllers/user/user.controller";
+import { LanguageAdapter } from "../../utils/language-adapter";
 
 class SubmitCommand extends Command {
     constructor(client: CommandoClient) {
@@ -29,14 +30,24 @@ class SubmitCommand extends Command {
     async run(message: CommandMessage, args: { dom: GuildMember | 'NONE' }): Promise<Message | Message[]> {
 
         if (args.dom === 'NONE')
-            return message.channel.send(`You can't be your own master silly! Then you would get to do everything you enjoy, right?`);
+            return message.channel.send(
+                LanguageAdapter.setPronouns(
+                    `You can't be your own [0:master/mistress] silly! Then you would get to do everything you enjoy, right?`,
+                    message.member
+                )
+            );
 
         if (args.dom === null)
-            return message.channel.send(`Hmmm... is your master imaginary because I can't find him!`);
+            return message.channel.send(`Hmmm... is your dom imaginary because I can't find him!`);
 
         // some validations
         if (args.dom.id === message.author.id)
-            return message.channel.send(`You can't be your own master silly! Then you would get to do everything you enjoy, right?`);
+            return message.channel.send(
+                LanguageAdapter.setPronouns(
+                    `You can't be your own [0:master/mistress] silly! Then you would get to do everything you enjoy, right?`,
+                    message.member
+                )
+            );
 
         // the reason why we have to do the reverse is because it is
         // not guarenteed that if the previous statement returns false
@@ -60,7 +71,7 @@ class SubmitCommand extends Command {
 
         if (!hasDom) {
             return message.channel.send(
-                `Ooh... sorry you can't have two masters ~ How can you give all your worship to two people? ~ You'll have to beg your current master to let you go before you can submit to someone else ~`
+                `Ooh... sorry you can't have two masters ~ How can you give all your worship to two people? ~ You'll have to beg your current idol to let you go before you can submit to someone else ~`
             );
         }
 
