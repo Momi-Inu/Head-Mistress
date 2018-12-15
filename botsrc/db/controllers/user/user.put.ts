@@ -108,4 +108,12 @@ export class UserPutController extends Controller {
             sub: await mongoSub.save()
         }
     }
+
+    public static async setPronoun(user: GuildMember, pronoun: 'Female' | 'Male' | 'Neutral') {
+        const mongoUser = await this.ensuredGet(user);
+
+        mongoUser.pronoun = pronoun.toLowerCase() as 'female' | 'male' | 'neutral';
+
+        return await mongoUser.save();
+    }
 }

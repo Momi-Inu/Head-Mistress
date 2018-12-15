@@ -1,6 +1,7 @@
 import { Command, CommandoClient, CommandMessage } from "discord.js-commando";
 import { Message, GuildMember } from "discord.js";
 import { UserController } from "../../../db/controllers/user/user.controller";
+import { LanguageAdapter } from "../../utils/language-adapter";
 
 class CollarCommand extends Command {
     constructor(client: CommandoClient) {
@@ -58,7 +59,11 @@ class CollarCommand extends Command {
 
         // sending the collar request
         await UserController.Put.collarUser(message.member, args.collaree);
-        return message.channel.send(`${message.member.displayName} has put a collar around his / hers new pet, ${args.collaree.displayName}!`);
+        return message.channel.send(
+            await LanguageAdapter.setPronouns(
+                `${message.member.displayName} has put a collar around [0:his/her/their] new pet, ${args.collaree.displayName}!`,
+                message.member
+            ));
     }
 }
 

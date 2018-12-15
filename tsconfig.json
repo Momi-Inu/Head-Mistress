@@ -7,12 +7,14 @@
         "preserveConstEnums": true,
         "sourceMap": true,
         "outDir": "./build",
-        "rootDir": "./botsrc",
         "watch": true,
         "allowJs": true,
         "lib": [
             "es5",
             "es2015"
         ]
-    }
+    },
+    "exclude": [
+        "./gulpfile.js"
+    ]
 }

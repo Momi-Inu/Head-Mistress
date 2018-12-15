@@ -10,6 +10,7 @@ class DecollarCommand extends Command {
             group: 'assignment',
             memberName: 'assignment:decollar',
             description: 'Remove the collar from your pet or yourself!',
+            aliases: ['uncollar'],
             args: [
                 {
                     key: 'collar',

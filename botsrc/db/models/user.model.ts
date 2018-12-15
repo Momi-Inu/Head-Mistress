@@ -9,6 +9,10 @@ export const UserSchema = new Schema({
         type: String,
         ref: 'guild'
     },
+    pronoun: {
+        type: String,
+        default: 'neutral'
+    },
     usersSubs: [
         {
             type: Schema.Types.ObjectId,

@@ -1,9 +1,11 @@
 import { Command, CommandoClient, CommandMessage } from "discord.js-commando";
-import { Message, GuildMember, Guild, Role, Collection } from "discord.js";
+import { Message, GuildMember, Guild, Role, Collection, UserConnection } from "discord.js";
 import { AppDispatcher } from "../../utils/application-dispatcher";
 import { AppBuilder } from "../../utils/application-builder";
 import { ApplicationController } from "../../../db/controllers/application/application.controller";
 import { applicationResponse } from "../../formats/answers.format";
+import { UserController } from "../../../db/controllers/user/user.controller";
+
 
 // type response = 
 
@@ -97,11 +99,19 @@ class SetupCommand extends Command {
             .createReactQuestion('SEXUALITY',
                 'What is your sexuality?',
                 [
-                    AppBuilder.createReaction('🤷', 'Non-Binary', 'GENDER'),
+                    AppBuilder.createReaction('🤷', 'Non-Binary', 'PRONOUN'),
+                    AppBuilder.createReaction('👩', 'Female', 'PRONOUN'),
+                    AppBuilder.createReaction('🤵', 'Male', 'PRONOUN'),
+                    AppBuilder.createReaction('👆', 'Trap', 'PRONOUN'),
+                    AppBuilder.createReaction('👋', 'Trans', 'PRONOUN'),
+                ]
+            )
+            .createReactQuestion('PRONOUN',
+                `What's your preferred pronoun?`,
+                [
+                    AppBuilder.createReaction('👨', 'Male', 'GENDER'),
                     AppBuilder.createReaction('👩', 'Female', 'GENDER'),
-                    AppBuilder.createReaction('🤵', 'Male', 'GENDER'),
-                    AppBuilder.createReaction('👆', 'Trap', 'GENDER'),
-                    AppBuilder.createReaction('👋', 'Trans', 'GENDER'),
+                    AppBuilder.createReaction('🤷', 'Neutral', 'GENDER')
                 ]
             )
             .createReactQuestion('GENDER',
@@ -156,11 +166,11 @@ class SetupCommand extends Command {
         // set the guild to be used with the dispatcher
         // if the guild is NOT set then there will just be no picture
         myDispatcher.useGuild(message.guild).dispatchQuestions().then((applicationResponse) => {
-
             // processing to be done with the response
             this.determineRoles(applicationResponse, message.member);
+            UserController.Put.setPronoun(message.member, applicationResponse.answers.PRONOUN.reactionPrompt as "Female" | "Male" | "Neutral");
         }).catch((error) => {
-
+            console.log(error);
             // ¯\_(ツ)_/¯ yeah i give a shit about conditions
             if (error.message !== 'TIMED OUT')
                 message.channel.send('Please allow me to send you DM\'s to continue the application');
