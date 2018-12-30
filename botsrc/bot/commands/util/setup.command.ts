@@ -32,6 +32,7 @@ class SetupCommand extends Command {
     }
 
     private async giveRoles(roleNames: string[], member: GuildMember) {
+        console.log(roleNames)
         let roles: Role[] = [];
         for (let roleName of roleNames) {
             const role = this.getRole(roleName, member.guild);
@@ -53,7 +54,7 @@ class SetupCommand extends Command {
     }
 
     private async removePreviouslyAssignedRoles(member: GuildMember) {
-        const roles = member.roles.filter(role => role.color === this.roleColor);
+        const roles = member.roles.filter(role => role.color == this.roleColor);
         return await member.removeRoles(roles);
     }
 

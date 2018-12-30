@@ -34,7 +34,6 @@ export class LanguageAdapter {
         let currentSentence = sentence;
         let openBracked = currentSentence.indexOf('[');
         let closedBracket = currentSentence.indexOf(']')
-
         do {
             generatedString += currentSentence.slice(0, openBracked);
             generatedString += generator(

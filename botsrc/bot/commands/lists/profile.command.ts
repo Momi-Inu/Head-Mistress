@@ -59,7 +59,6 @@ class PetsCommand extends Command {
         const trainers = this.collectMembers(mongoUser.collarers as IUser[], message.guild);
         const masters = this.collectMembers(mongoUser.usersDoms as IUser[], message.guild);
         const slaves = this.collectMembers(mongoUser.usersSubs as IUser[], message.guild);
-
         const response = new BotEmbedResponse(this.client)
             .setThumbnail(
                 (args.guildMember === 'NONE') ? message.author.avatarURL : guildMemberAsUser.avatarURL

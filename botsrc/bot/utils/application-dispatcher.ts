@@ -205,8 +205,12 @@ export class AppDispatcher {
      * @param message the message to react to
      * @param reactions the reactions to add to a message
      */
-    private addReactionsToMessage(message: Message, reactions: IReaction[]) {
-        reactions.forEach((reaction) => message.react(reaction.reaction));
+    private async addReactionsToMessage(message: Message, reactions: IReaction[]) {
+        // reactions.forEach((reaction) => message.react(reaction.reaction));
+
+        for(const reaction of reactions) {
+            await message.react(reaction.reaction);
+        }
     }
 
     /**

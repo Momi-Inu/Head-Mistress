@@ -49,7 +49,7 @@ class DecollarCommand extends Command {
         if (collarOnOtherPerson) {
             await UserController.Put.decollarUser(message.member, args.collar);
             return message.channel.send(
-                LanguageAdapter.setPronouns(
+                await LanguageAdapter.setPronouns(
                     `${message.member.displayName} let [0:his/her] pet ${args.collar.displayName} go!`,
                     message.member
                 )

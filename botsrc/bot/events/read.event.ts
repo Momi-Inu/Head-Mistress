@@ -1,7 +1,7 @@
 import { CommandoClient } from "discord.js-commando";
 
 const bootstrapBot = (client: CommandoClient) => {
-    client.user.setActivity(`cutey christmasy movies | ${client.commandPrefix}help`, { type: 'PLAYING' })
+    client.user.setActivity(`fricking ur waifu | ${client.commandPrefix}help`, { type: 'PLAYING' })
     console.log(`${client.user.tag} is now online!`);
 };
 
