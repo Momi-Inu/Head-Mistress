@@ -162,11 +162,6 @@ export class AppDispatcher {
         const formattedQuestion = this.buildReactionQuestion(question);
         const message = await this.member.send(formattedQuestion) as Message;
 
-        // add all the reactions under the embed to make it easy for the user
-        // to finish the question on mobile
-        await this.addReactionsToMessage(message, question.reactions);
-
-
         // filter to be used on the reaction to make sure that the reaction
         // added is valid and predefined
         const reactionFilters = (reaction: MessageReaction, user: ClientUser) => {
@@ -186,8 +181,14 @@ export class AppDispatcher {
         };
 
         // collect 1 reaction and wait for the amount of time set by the timeout of the application
-        const reactions = await message.awaitReactions(reactionFilters, { time: this.app.application.questionTimeout * 60000, max: 1 })
+        const reactionsPromise = message.awaitReactions(reactionFilters, { time: this.app.application.questionTimeout * 60000, max: 1 })
 
+        // add all the reactions under the embed to make it easy for the user
+        // to finish the question on mobile
+        await this.addReactionsToMessage(message, question.reactions);
+
+        const reactions = await reactionsPromise;
+        
         // if the size returned zero the applicant failed to file their answer,
         // therefore send a `TIMED OUT` error
         if (reactions.size === 0) {
@@ -208,7 +209,7 @@ export class AppDispatcher {
     private async addReactionsToMessage(message: Message, reactions: IReaction[]) {
         // reactions.forEach((reaction) => message.react(reaction.reaction));
 
-        for(const reaction of reactions) {
+        for (const reaction of reactions) {
             await message.react(reaction.reaction);
         }
     }

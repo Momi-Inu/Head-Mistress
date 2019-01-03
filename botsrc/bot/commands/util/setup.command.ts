@@ -78,7 +78,7 @@ class SetupCommand extends Command {
         const myApp = new AppBuilder(message.guild)
             .setTitle('Initial Role Setup')
             .setDescription('This will ask you a bunch of questions to get you setup into the server')
-            .setQuestionTimeout(1)
+            .setQuestionTimeout(30)
             .createReactQuestion('AVAILABILITY',
                 'Are you taken?',
                 [
@@ -87,17 +87,18 @@ class SetupCommand extends Command {
                     AppBuilder.createReaction('🤐', 'Complicated', 'AGEGROUP'),
                 ]
             )
-            .createReactQuestion(
-                'AGEGROUP',
-                'Whats your age group?',
-                [
-                    AppBuilder.createReaction('💙', '18 - 20', 'SEXUALITY'),
-                    AppBuilder.createReaction('💚', '21 - 23', 'SEXUALITY'),
-                    AppBuilder.createReaction('💛', '24 - 26', 'SEXUALITY'),
-                    AppBuilder.createReaction('💜', '27 - 29', 'SEXUALITY'),
-                    AppBuilder.createReaction('🖤', '29+', 'SEXUALITY')
-                ]
-            )
+            .createFreetextQuestion('AGEGROUP', `What's your age group?`, 'SEXUALITY')
+            // .createReactQuestion(
+            //     'AGEGROUP',
+            //     'Whats your age group?',
+            //     [
+            //         AppBuilder.createReaction('💙', '18 - 20', 'SEXUALITY'),
+            //         AppBuilder.createReaction('💚', '21 - 23', 'SEXUALITY'),
+            //         AppBuilder.createReaction('💛', '24 - 26', 'SEXUALITY'),
+            //         AppBuilder.createReaction('💜', '27 - 29', 'SEXUALITY'),
+            //         AppBuilder.createReaction('🖤', '29+', 'SEXUALITY')
+            //     ]
+            // )
             .createReactQuestion('SEXUALITY',
                 'What is your sexuality?',
                 [
@@ -169,8 +170,9 @@ class SetupCommand extends Command {
         // if the guild is NOT set then there will just be no picture
         myDispatcher.useGuild(message.guild).dispatchQuestions().then((applicationResponse) => {
             // processing to be done with the response
-            this.determineRoles(applicationResponse, message.member);
-            UserController.Put.setPronoun(message.member, applicationResponse.answers.PRONOUN.reactionPrompt as "Female" | "Male" | "Neutral");
+            message.channel.send(JSON.stringify(applicationResponse, null, 4), { code: 'JSON' });
+            // this.determineRoles(applicationResponse, message.member);
+            // UserController.Put.setPronoun(message.member, applicationResponse.answers.PRONOUN.reactionPrompt as "Female" | "Male" | "Neutral");
         }).catch((error) => {
             console.log(error);
             // ¯\_(ツ)_/¯ yeah i give a shit about conditions
