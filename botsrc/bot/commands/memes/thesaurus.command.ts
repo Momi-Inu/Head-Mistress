@@ -8,7 +8,7 @@ class ThesaurusCommand extends Command {
     punctDict: { [puntuation: string]: boolean };
 
     constructor(client: CommandoClient) {
-        const commandName = 'thesaurus';
+        const commandName = 'smartypants';
         super(client, {
             name: commandName,
             group: 'memes',
@@ -136,8 +136,9 @@ class ThesaurusCommand extends Command {
             const messagesArray = messages.array();
             for (const previousMessage of messagesArray) {
                 lastMessage = previousMessage;
+                const messageContentFormatted = previousMessage.content.replace(' ', '');
                 if (
-                    !previousMessage.content.startsWith(`${this.client.commandPrefix}${this.name}`) &&
+                    !messageContentFormatted.startsWith(`${this.client.commandPrefix}${this.name}`) &&
                     previousMessage.author.id !== this.client.user.id
                 ) {
                     foundTextMessage = false;
@@ -158,8 +159,8 @@ class ThesaurusCommand extends Command {
         words.forEach((word) => {
             const punctWord = this.objectifyPunctuation(word);
             const wordOptions: string[] = thesaurus.find(punctWord.word.toLocaleLowerCase());
-            if(this.commonDict[word]) newSentence += word + ' ';
-            else if(wordOptions.length > 0) newSentence += `${wordOptions[Math.floor(Math.random()*wordOptions.length)]}${punctWord.punctuation} `;
+            if (this.commonDict[word]) newSentence += word + ' ';
+            else if (wordOptions.length > 0) newSentence += `${wordOptions[Math.floor(Math.random() * wordOptions.length)]}${punctWord.punctuation} `;
             else newSentence += word + ' ';
         });
 

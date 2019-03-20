@@ -19,7 +19,7 @@ const bot = new CommandoClient({
 
     // this is the default command prefix,
     // can be changes by commando later
-    commandPrefix: ':',
+    commandPrefix: 'hm',
 
     // an array of owners it taken from the config json file provided
     // this is an optional array of course
