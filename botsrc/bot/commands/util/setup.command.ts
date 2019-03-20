@@ -79,15 +79,18 @@ class SetupCommand extends Command {
             .setTitle('Initial Role Setup')
             .setDescription('This will ask you a bunch of questions to get you setup into the server')
             .setQuestionTimeout(30)
-            .createReactQuestion('AVAILABILITY',
-                'Are you taken?',
-                [
-                    AppBuilder.createReaction('😘', 'Taken', 'AGEGROUP'),
-                    AppBuilder.createReaction('😝', 'Not Taken', 'AGEGROUP'),
-                    AppBuilder.createReaction('🤐', 'Complicated', 'AGEGROUP'),
-                ]
-            )
-            .createFreetextQuestion('AGEGROUP', `What's your age group?`, 'SEXUALITY')
+            // .createReactQuestion('AVAILABILITY',
+            //     'Are you taken?',
+            //     [
+            //         AppBuilder.createReaction('😘', 'Taken', 'AGEGROUP'),
+            //         AppBuilder.createReaction('😝', 'Not Taken', 'AGEGROUP'),
+            //         AppBuilder.createReaction('🤐', 'Complicated', 'AGEGROUP'),
+            //     ]
+            // )
+            .createFreetextQuestion('AGEGROUP', `What's your age group?`, 'SEXUALITY', (value) => {
+                const possibleNumber = Number.parseInt(value);
+                return !isNaN(possibleNumber);
+            })
             // .createReactQuestion(
             //     'AGEGROUP',
             //     'Whats your age group?',
@@ -99,65 +102,66 @@ class SetupCommand extends Command {
             //         AppBuilder.createReaction('🖤', '29+', 'SEXUALITY')
             //     ]
             // )
-            .createReactQuestion('SEXUALITY',
-                'What is your sexuality?',
-                [
-                    AppBuilder.createReaction('🤷', 'Non-Binary', 'PRONOUN'),
-                    AppBuilder.createReaction('👩', 'Female', 'PRONOUN'),
-                    AppBuilder.createReaction('🤵', 'Male', 'PRONOUN'),
-                    AppBuilder.createReaction('👆', 'Trap', 'PRONOUN'),
-                    AppBuilder.createReaction('👋', 'Trans', 'PRONOUN'),
-                ]
-            )
-            .createReactQuestion('PRONOUN',
-                `What's your preferred pronoun?`,
-                [
-                    AppBuilder.createReaction('👨', 'Male', 'GENDER'),
-                    AppBuilder.createReaction('👩', 'Female', 'GENDER'),
-                    AppBuilder.createReaction('🤷', 'Neutral', 'GENDER')
-                ]
-            )
-            .createReactQuestion('GENDER',
-                'What is your gender?',
-                [
-                    AppBuilder.createReaction('🤷', 'Straight', 'TRAIT'),
-                    AppBuilder.createReaction('👩', 'Gay', 'TRAIT'),
-                    AppBuilder.createReaction('🤵', 'Pansexual', 'TRAIT'),
-                    AppBuilder.createReaction('👆', 'Asexual', 'TRAIT'),
-                    AppBuilder.createReaction('👋', 'Bisexual', 'TRAIT'),
-                ]
-            )
-            .createReactQuestion('TRAIT',
-                'What\'s your kink?',
-                [
-                    AppBuilder.createReaction('👅', 'Submissive', 'SUBMISSIVE'),
-                    AppBuilder.createReaction('💄', 'Dominant', 'DOMINANT'),
-                    AppBuilder.createReaction('💞', 'Switch', 'SWITCH')
-                ]
-            )
-            .createReactQuestion('SUBMISSIVE',
-                'What would you like to be?',
-                [
-                    AppBuilder.createReaction('👗', 'Maid', 'TEST'),
-                    AppBuilder.createReaction('🤵', 'Butler', 'TEST'),
-                ]
-            )
-            .createReactQuestion('DOMINANT',
-                'What would you like to be?',
-                [
-                    AppBuilder.createReaction('🕵', 'Master', 'TEST'),
-                    AppBuilder.createReaction('💄', 'Mistress', 'TEST'),
-                ]
-            )
-            .createReactQuestion('SWITCH',
-                'What would you like to be?',
-                [
-                    AppBuilder.createReaction('🕵', 'Master', 'TEST'),
-                    AppBuilder.createReaction('💄', 'Mistress', 'TEST'),
-                    AppBuilder.createReaction('👗', 'Maid', 'TEST'),
-                    AppBuilder.createReaction('🤵', 'Butler', 'TEST'),
-                ]
-            )
+
+            // .createReactQuestion('SEXUALITY',
+            //     'What is your sexuality?',
+            //     [
+            //         AppBuilder.createReaction('🤷', 'Non-Binary', 'PRONOUN'),
+            //         AppBuilder.createReaction('👩', 'Female', 'PRONOUN'),
+            //         AppBuilder.createReaction('🤵', 'Male', 'PRONOUN'),
+            //         AppBuilder.createReaction('👆', 'Trap', 'PRONOUN'),
+            //         AppBuilder.createReaction('👋', 'Trans', 'PRONOUN'),
+            //     ]
+            // )
+            // .createReactQuestion('PRONOUN',
+            //     `What's your preferred pronoun?`,
+            //     [
+            //         AppBuilder.createReaction('👨', 'Male', 'GENDER'),
+            //         AppBuilder.createReaction('👩', 'Female', 'GENDER'),
+            //         AppBuilder.createReaction('🤷', 'Neutral', 'GENDER')
+            //     ]
+            // )
+            // .createReactQuestion('GENDER',
+            //     'What is your gender?',
+            //     [
+            //         AppBuilder.createReaction('🤷', 'Straight', 'TRAIT'),
+            //         AppBuilder.createReaction('👩', 'Gay', 'TRAIT'),
+            //         AppBuilder.createReaction('🤵', 'Pansexual', 'TRAIT'),
+            //         AppBuilder.createReaction('👆', 'Asexual', 'TRAIT'),
+            //         AppBuilder.createReaction('👋', 'Bisexual', 'TRAIT'),
+            //     ]
+            // )
+            // .createReactQuestion('TRAIT',
+            //     'What\'s your kink?',
+            //     [
+            //         AppBuilder.createReaction('👅', 'Submissive', 'SUBMISSIVE'),
+            //         AppBuilder.createReaction('💄', 'Dominant', 'DOMINANT'),
+            //         AppBuilder.createReaction('💞', 'Switch', 'SWITCH')
+            //     ]
+            // )
+            // .createReactQuestion('SUBMISSIVE',
+            //     'What would you like to be?',
+            //     [
+            //         AppBuilder.createReaction('👗', 'Maid', 'TEST'),
+            //         AppBuilder.createReaction('🤵', 'Butler', 'TEST'),
+            //     ]
+            // )
+            // .createReactQuestion('DOMINANT',
+            //     'What would you like to be?',
+            //     [
+            //         AppBuilder.createReaction('🕵', 'Master', 'TEST'),
+            //         AppBuilder.createReaction('💄', 'Mistress', 'TEST'),
+            //     ]
+            // )
+            // .createReactQuestion('SWITCH',
+            //     'What would you like to be?',
+            //     [
+            //         AppBuilder.createReaction('🕵', 'Master', 'TEST'),
+            //         AppBuilder.createReaction('💄', 'Mistress', 'TEST'),
+            //         AppBuilder.createReaction('👗', 'Maid', 'TEST'),
+            //         AppBuilder.createReaction('🤵', 'Butler', 'TEST'),
+            //     ]
+            // )
 
         // the dispatcher will be the thing that sends the application over to the
         // users dms

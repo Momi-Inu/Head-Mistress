@@ -24,5 +24,6 @@ export interface IQuestion {
     prompt: string;
     reactions?: IReaction[];
     next?: string;
+    validator?: (value) => boolean;
     questionName: string
 };

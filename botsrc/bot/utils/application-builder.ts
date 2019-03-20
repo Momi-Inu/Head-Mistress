@@ -222,11 +222,12 @@ export class AppBuilder {
      * 
      * @returns chainable
      */
-    createFreetextQuestion(questionName: string, prompt: string, next: string = null): AppBuilder {
+    createFreetextQuestion(questionName: string, prompt: string, next: string = null, validator: (value: any) => boolean = () => true): AppBuilder {
         const freetextQuestion: IQuestion = {
             type: 'FREETEXT',
             prompt: prompt,
             next: next,
+            validator: validator,
             questionName: questionName
         };
 

@@ -1,5 +1,5 @@
 import { AppHandler } from "./application-handler";
-import { GuildMember, User, Message, MessageReaction, ClientUser, DMChannel, Guild } from "discord.js";
+import { GuildMember, User, Message, MessageReaction, ClientUser, DMChannel, Guild, Collection } from "discord.js";
 import { IApplication } from "../../db/formats/application.format";
 import { IQuestion, IReaction } from "../../db/formats/question.format";
 import { BotEmbedResponse } from "./bot-response.util";
@@ -120,7 +120,6 @@ export class AppDispatcher {
      * @returns the users answer
      */
     private async dispatchFreetextQuestion(question: IQuestion) {
-
         // get and send the embed
         const formattedQuestion = this.buildFreetextQuestion(question);
         const message = await this.member.send(formattedQuestion) as Message;
@@ -131,18 +130,28 @@ export class AppDispatcher {
         // filter to make sure the collection is only recieving the applicants answer
         const filter = (incomingMessage: Message) => incomingMessage.author.id === this.member.id;
 
-        // wait for 1 message to come through with the timeout set from the application
-        const answerInCollection = await channel.awaitMessages(filter, {
-            time: this.app.application.questionTimeout * 60000,
-            max: 1
-        });
+        let answerInCollection: Collection<string, Message>;
+        let currentValidation = false;
+        do {
 
-        // if the size returned zero the applicant failed to file their answer,
-        // therefore send a `TIMED OUT` error
-        if (answerInCollection.size === 0) {
-            this.sendTimedOutMessage();
-            throw new Error('TIMED OUT');
-        }
+            // wait for 1 message to come through with the timeout set from the application
+            answerInCollection = await channel.awaitMessages(filter, {
+                time: this.app.application.questionTimeout * 60000,
+                max: 1
+            });
+
+            // if the size returned zero the applicant failed to file their answer,
+            // therefore send a `TIMED OUT` error
+            if (answerInCollection.size === 0) {
+                this.sendTimedOutMessage();
+                throw new Error('TIMED OUT');
+                break;
+            }
+
+            currentValidation = question.validator(answerInCollection.first().content);
+
+            if (!currentValidation) channel.send(`${answerInCollection.first().content} is invalid, try again`);
+        } while (question.validator(answerInCollection.first().content));
 
         // if the applicant did file their answer, return the content of their answer
         return answerInCollection.first().content;
@@ -188,7 +197,7 @@ export class AppDispatcher {
         await this.addReactionsToMessage(message, question.reactions);
 
         const reactions = await reactionsPromise;
-        
+
         // if the size returned zero the applicant failed to file their answer,
         // therefore send a `TIMED OUT` error
         if (reactions.size === 0) {

@@ -26,6 +26,7 @@
     "gulp-sourcemaps": "^2.6.4",
     "gulp-typescript": "^5.0.0-alpha.3",
     "mongoose": "^5.2.12",
+    "thesaurus": "0.0.0",
     "typescript": "^3.0.3"
   }
 }

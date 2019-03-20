@@ -17,6 +17,7 @@ export const setBotCommandGroupsFor = (client: CommandoClient) => {
             ['assignment', 'Assignment'],
             ['lists', 'Show off'],
             ['util', 'Helpful Commands'],
+            ['memes', 'Memes']
         ])
         .registerDefaultCommands({
             prefix: false,
