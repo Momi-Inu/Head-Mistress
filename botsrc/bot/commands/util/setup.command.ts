@@ -10,7 +10,7 @@ import { UserController } from "../../../db/controllers/user/user.controller";
 // type response = 
 
 class SetupCommand extends Command {
-    roleColor: number;
+    roleSet: Set<string>;
     constructor(client: CommandoClient) {
         const commandName = 'setup';
         super(client, {
@@ -24,7 +24,33 @@ class SetupCommand extends Command {
             guildOnly: true
         });
 
-        this.roleColor = 0x99abb5;
+        this.roleSet = new Set([
+            // AVAILABILITY ROLES
+            'Taken', 'Not Taken', 'Complicated',
+
+            // AGE GROUP ROLES
+            '18 - 20', '21 - 23', '24 - 26',
+            '27 - 29', '29+',
+
+            // SEXUALITY ROLES
+            'Non-Binary', 'Female', 'Male',
+            'Trap', 'Trans',
+
+            // PRONOUN ROLES
+            'Male', 'Female', 'Neutral',
+
+            // GENDER ROLES
+            'Straight', 'Gay', 'Pansexual',
+            'Asexual', 'Bisexual',
+
+            // KINK ROLES
+            'Submissive', 'Dominant', 'Switch',
+
+            // KINK TYPE ROLES
+            'Maid', 'Butler', 'Master',
+            'Mistress'
+        ]);
+
     }
 
     private getRole(roleName: string, guild: Guild) {
@@ -40,8 +66,7 @@ class SetupCommand extends Command {
                 roles.push(
                     await member.guild.createRole(
                         {
-                            name: roleName,
-                            color: this.roleColor
+                            name: roleName
                         },
                         'Required role via setup application'
                     )
@@ -54,7 +79,7 @@ class SetupCommand extends Command {
     }
 
     private async removePreviouslyAssignedRoles(member: GuildMember) {
-        const roles = member.roles.filter(role => role.color == this.roleColor);
+        const roles = member.roles.filter(role => this.roleSet.has(role.name));
         return await member.removeRoles(roles);
     }
 
@@ -79,89 +104,89 @@ class SetupCommand extends Command {
             .setTitle('Initial Role Setup')
             .setDescription('This will ask you a bunch of questions to get you setup into the server')
             .setQuestionTimeout(30)
-            // .createReactQuestion('AVAILABILITY',
-            //     'Are you taken?',
-            //     [
-            //         AppBuilder.createReaction('😘', 'Taken', 'AGEGROUP'),
-            //         AppBuilder.createReaction('😝', 'Not Taken', 'AGEGROUP'),
-            //         AppBuilder.createReaction('🤐', 'Complicated', 'AGEGROUP'),
-            //     ]
-            // )
+            .createReactQuestion('AVAILABILITY',
+                'Are you taken?',
+                [
+                    AppBuilder.createReaction('😘', 'Taken', 'AGEGROUP'),
+                    AppBuilder.createReaction('😝', 'Not Taken', 'AGEGROUP'),
+                    AppBuilder.createReaction('🤐', 'Complicated', 'AGEGROUP'),
+                ]
+            )
             .createFreetextQuestion('AGEGROUP', `What's your age group?`, 'SEXUALITY', (value) => {
                 const possibleNumber = Number.parseInt(value);
                 return !isNaN(possibleNumber);
             })
-            // .createReactQuestion(
-            //     'AGEGROUP',
-            //     'Whats your age group?',
-            //     [
-            //         AppBuilder.createReaction('💙', '18 - 20', 'SEXUALITY'),
-            //         AppBuilder.createReaction('💚', '21 - 23', 'SEXUALITY'),
-            //         AppBuilder.createReaction('💛', '24 - 26', 'SEXUALITY'),
-            //         AppBuilder.createReaction('💜', '27 - 29', 'SEXUALITY'),
-            //         AppBuilder.createReaction('🖤', '29+', 'SEXUALITY')
-            //     ]
-            // )
+            .createReactQuestion(
+                'AGEGROUP',
+                'Whats your age group?',
+                [
+                    AppBuilder.createReaction('💙', '18 - 20', 'SEXUALITY'),
+                    AppBuilder.createReaction('💚', '21 - 23', 'SEXUALITY'),
+                    AppBuilder.createReaction('💛', '24 - 26', 'SEXUALITY'),
+                    AppBuilder.createReaction('💜', '27 - 29', 'SEXUALITY'),
+                    AppBuilder.createReaction('🖤', '29+', 'SEXUALITY')
+                ]
+            )
 
-            // .createReactQuestion('SEXUALITY',
-            //     'What is your sexuality?',
-            //     [
-            //         AppBuilder.createReaction('🤷', 'Non-Binary', 'PRONOUN'),
-            //         AppBuilder.createReaction('👩', 'Female', 'PRONOUN'),
-            //         AppBuilder.createReaction('🤵', 'Male', 'PRONOUN'),
-            //         AppBuilder.createReaction('👆', 'Trap', 'PRONOUN'),
-            //         AppBuilder.createReaction('👋', 'Trans', 'PRONOUN'),
-            //     ]
-            // )
-            // .createReactQuestion('PRONOUN',
-            //     `What's your preferred pronoun?`,
-            //     [
-            //         AppBuilder.createReaction('👨', 'Male', 'GENDER'),
-            //         AppBuilder.createReaction('👩', 'Female', 'GENDER'),
-            //         AppBuilder.createReaction('🤷', 'Neutral', 'GENDER')
-            //     ]
-            // )
-            // .createReactQuestion('GENDER',
-            //     'What is your gender?',
-            //     [
-            //         AppBuilder.createReaction('🤷', 'Straight', 'TRAIT'),
-            //         AppBuilder.createReaction('👩', 'Gay', 'TRAIT'),
-            //         AppBuilder.createReaction('🤵', 'Pansexual', 'TRAIT'),
-            //         AppBuilder.createReaction('👆', 'Asexual', 'TRAIT'),
-            //         AppBuilder.createReaction('👋', 'Bisexual', 'TRAIT'),
-            //     ]
-            // )
-            // .createReactQuestion('TRAIT',
-            //     'What\'s your kink?',
-            //     [
-            //         AppBuilder.createReaction('👅', 'Submissive', 'SUBMISSIVE'),
-            //         AppBuilder.createReaction('💄', 'Dominant', 'DOMINANT'),
-            //         AppBuilder.createReaction('💞', 'Switch', 'SWITCH')
-            //     ]
-            // )
-            // .createReactQuestion('SUBMISSIVE',
-            //     'What would you like to be?',
-            //     [
-            //         AppBuilder.createReaction('👗', 'Maid', 'TEST'),
-            //         AppBuilder.createReaction('🤵', 'Butler', 'TEST'),
-            //     ]
-            // )
-            // .createReactQuestion('DOMINANT',
-            //     'What would you like to be?',
-            //     [
-            //         AppBuilder.createReaction('🕵', 'Master', 'TEST'),
-            //         AppBuilder.createReaction('💄', 'Mistress', 'TEST'),
-            //     ]
-            // )
-            // .createReactQuestion('SWITCH',
-            //     'What would you like to be?',
-            //     [
-            //         AppBuilder.createReaction('🕵', 'Master', 'TEST'),
-            //         AppBuilder.createReaction('💄', 'Mistress', 'TEST'),
-            //         AppBuilder.createReaction('👗', 'Maid', 'TEST'),
-            //         AppBuilder.createReaction('🤵', 'Butler', 'TEST'),
-            //     ]
-            // )
+            .createReactQuestion('SEXUALITY',
+                'What is your sexuality?',
+                [
+                    AppBuilder.createReaction('🤷', 'Non-Binary', 'PRONOUN'),
+                    AppBuilder.createReaction('👩', 'Female', 'PRONOUN'),
+                    AppBuilder.createReaction('🤵', 'Male', 'PRONOUN'),
+                    AppBuilder.createReaction('👆', 'Trap', 'PRONOUN'),
+                    AppBuilder.createReaction('👋', 'Trans', 'PRONOUN'),
+                ]
+            )
+            .createReactQuestion('PRONOUN',
+                `What's your preferred pronoun?`,
+                [
+                    AppBuilder.createReaction('👨', 'Male', 'GENDER'),
+                    AppBuilder.createReaction('👩', 'Female', 'GENDER'),
+                    AppBuilder.createReaction('🤷', 'Neutral', 'GENDER')
+                ]
+            )
+            .createReactQuestion('GENDER',
+                'What is your gender?',
+                [
+                    AppBuilder.createReaction('🤷', 'Straight', 'TRAIT'),
+                    AppBuilder.createReaction('👩', 'Gay', 'TRAIT'),
+                    AppBuilder.createReaction('🤵', 'Pansexual', 'TRAIT'),
+                    AppBuilder.createReaction('👆', 'Asexual', 'TRAIT'),
+                    AppBuilder.createReaction('👋', 'Bisexual', 'TRAIT'),
+                ]
+            )
+            .createReactQuestion('TRAIT',
+                'What\'s your kink?',
+                [
+                    AppBuilder.createReaction('👅', 'Submissive', 'SUBMISSIVE'),
+                    AppBuilder.createReaction('💄', 'Dominant', 'DOMINANT'),
+                    AppBuilder.createReaction('💞', 'Switch', 'SWITCH')
+                ]
+            )
+            .createReactQuestion('SUBMISSIVE',
+                'What would you like to be?',
+                [
+                    AppBuilder.createReaction('👗', 'Maid', 'TEST'),
+                    AppBuilder.createReaction('🤵', 'Butler', 'TEST'),
+                ]
+            )
+            .createReactQuestion('DOMINANT',
+                'What would you like to be?',
+                [
+                    AppBuilder.createReaction('🕵', 'Master', 'TEST'),
+                    AppBuilder.createReaction('💄', 'Mistress', 'TEST'),
+                ]
+            )
+            .createReactQuestion('SWITCH',
+                'What would you like to be?',
+                [
+                    AppBuilder.createReaction('🕵', 'Master', 'TEST'),
+                    AppBuilder.createReaction('💄', 'Mistress', 'TEST'),
+                    AppBuilder.createReaction('👗', 'Maid', 'TEST'),
+                    AppBuilder.createReaction('🤵', 'Butler', 'TEST'),
+                ]
+            )
 
         // the dispatcher will be the thing that sends the application over to the
         // users dms
@@ -175,8 +200,8 @@ class SetupCommand extends Command {
         myDispatcher.useGuild(message.guild).dispatchQuestions().then((applicationResponse) => {
             // processing to be done with the response
             message.channel.send(JSON.stringify(applicationResponse, null, 4), { code: 'JSON' });
-            // this.determineRoles(applicationResponse, message.member);
-            // UserController.Put.setPronoun(message.member, applicationResponse.answers.PRONOUN.reactionPrompt as "Female" | "Male" | "Neutral");
+            this.determineRoles(applicationResponse, message.member);
+            UserController.Put.setPronoun(message.member, applicationResponse.answers.PRONOUN.reactionPrompt as "Female" | "Male" | "Neutral");
         }).catch((error) => {
             console.log(error);
             // ¯\_(ツ)_/¯ yeah i give a shit about conditions
