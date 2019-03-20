@@ -46,4 +46,4 @@ class PetsCommand extends Command {
     }
 }
 
-module.exports = PetsCommand;
+// module.exports = PetsCommand;

@@ -71,4 +71,4 @@ class TrainersCommand extends Command {
     }
 }
 
-module.exports = TrainersCommand;
+// module.exports = TrainersCommand;

@@ -9,8 +9,8 @@ class PetsCommand extends Command {
         const commandName = 'profile';
         super(client, {
             name: commandName,
-            group: 'lists',
-            memberName: 'lists:profile',
+            group: 'relationships',
+            memberName: 'relationships:profile',
             autoAliases: true,
             aliases: ['relationships'],
             description: 'Get yours or someone elses list of pets and owners!',
