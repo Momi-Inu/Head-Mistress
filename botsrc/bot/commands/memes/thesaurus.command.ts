@@ -139,7 +139,6 @@ class ThesaurusCommand extends Command {
                 if (
                     !previousMessage.content.startsWith(`${this.client.commandPrefix}${this.name}`) &&
                     previousMessage.author.id !== this.client.user.id
-                    // previousMessage.author.id !== author.id
                 ) {
                     foundTextMessage = false;
                     break;
