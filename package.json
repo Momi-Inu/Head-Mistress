@@ -13,20 +13,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/gulp": "^4.0.5",
+    "@types/gulp": "^4.0.6",
     "@types/gulp-sourcemaps": "0.0.32",
-    "@types/mongoose": "^5.2.9",
+    "@types/mongoose": "^5.3.23",
     "discord.js": "^11.4.2",
     "discord.js-commando": "^0.10.0",
-    "eslint": "^5.5.0",
-    "gulp": "^3.9.1",
+    "eslint": "^5.15.3",
+    "gulp": "^4.0.0",
     "gulp-clean": "^0.4.0",
     "gulp-file": "^0.4.0",
     "gulp-sequence": "^1.0.0",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-typescript": "^5.0.0-alpha.3",
-    "mongoose": "^5.2.12",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^5.0.1",
+    "mongoose": "^5.4.19",
     "thesaurus": "0.0.0",
-    "typescript": "^3.0.3"
+    "typescript": "^3.3.4000"
   }
 }
