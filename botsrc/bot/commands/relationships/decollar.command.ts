@@ -8,8 +8,8 @@ class DecollarCommand extends Command {
         const commandName = 'decollar';
         super(client, {
             name: commandName,
-            group: 'assignment',
-            memberName: 'assignment:decollar',
+            group: 'relationships',
+            memberName: 'relationships:decollar',
             description: 'Remove the collar from your pet or yourself!',
             aliases: ['uncollar'],
             args: [

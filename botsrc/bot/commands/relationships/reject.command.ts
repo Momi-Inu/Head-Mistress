@@ -8,8 +8,8 @@ class RejectCommand extends Command {
         const commandName = 'reject';
         super(client, {
             name: commandName,
-            group: 'assignment',
-            memberName: 'assignment:reject',
+            group: 'relationships',
+            memberName: 'relationships:reject',
             description: `Reject your slaves very existance! Through them away like the toy they are ~`,
             args: [
                 {

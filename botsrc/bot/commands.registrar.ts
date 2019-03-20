@@ -14,7 +14,7 @@ export const setBotCommandGroupsFor = (client: CommandoClient) => {
         .registerDefaultTypes()
         .registerTypesIn(join(__dirname, './types'))
         .registerGroups([
-            ['assignment', 'Assignment'],
+            ['relationships', 'Relationships'],
             ['lists', 'Show off'],
             ['util', 'Helpful Commands'],
             ['memes', 'Memes']

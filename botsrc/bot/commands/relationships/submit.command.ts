@@ -8,8 +8,8 @@ class SubmitCommand extends Command {
         const commandName = 'submit';
         super(client, {
             name: commandName,
-            group: 'assignment',
-            memberName: 'assignment:submit',
+            group: 'relationships',
+            memberName: 'relationships:submit',
             description: `Submit yourself to your mistress or master~ Show your commitment. Careful! You can't go back after using this command unless your master or mistress releases you <3`,
             args: [
                 {

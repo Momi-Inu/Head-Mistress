@@ -8,8 +8,8 @@ class CollarCommand extends Command {
         const commandName = 'collar';
         super(client, {
             name: commandName,
-            group: 'assignment',
-            memberName: 'assignment:setup',
+            group: 'relationships',
+            memberName: 'relationships:setup',
             description: 'Put a collar on you little pet!',
             args: [
                 {
